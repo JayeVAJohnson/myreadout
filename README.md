@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myReadOut — Point your phone. Hear it read.</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #faf9f7; color: #111; line-height: 1.7; }
+
+    .hero { background: #1a1a2e; color: #fff; padding: 4.5rem 1.5rem 3.5rem; text-align: center; }
+    .badge { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 999px; padding: 5px 14px; font-size: 12px; margin-bottom: 1.5rem; letter-spacing: 0.05em; }
+    .hero h1 { font-size: clamp(2.2rem, 6vw, 3.5rem); font-weight: 500; line-height: 1.1; margin-bottom: 1.2rem; }
+    .hero h1 span { color: #9b8ff5; }
+    .hero p { font-size: 1.1rem; opacity: 0.75; max-width: 500px; margin: 0 auto 2.5rem; }
+    .hero-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem; }
+    .btn-white { background: #fff; color: #1a1a2e; padding: 14px 28px; border-radius: 999px; text-decoration: none; font-size: 15px; font-weight: 500; }
+    .btn-ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.35); padding: 14px 28px; border-radius: 999px; text-decoration: none; font-size: 15px; }
+    .hero-note { font-size: 12px; opacity: 0.5; }
+
+    .nav-tabs { display: flex; justify-content: center; gap: 0; border-bottom: 0.5px solid #e8e8e5; background: #fff; }
+    .nav-tab { padding: 14px 24px; font-size: 14px; color: #888; text-decoration: none; border-bottom: 2px solid transparent; cursor: pointer; background: none; border-top: none; border-left: none; border-right: none; font-family: inherit; }
+    .nav-tab.active { color: #3C3489; border-bottom-color: #3C3489; font-weight: 500; }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* About tab */
+    .about-section { max-width: 640px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .about-section h2 { font-size: 1.4rem; font-weight: 500; margin-bottom: 1rem; }
+    .about-section p { font-size: 15px; color: #444; margin-bottom: 1rem; }
+    .big-quote { border-left: 3px solid #3C3489; padding: 1rem 1.5rem; margin: 1.5rem 0; background: #f0effe; border-radius: 0 8px 8px 0; font-size: 1rem; color: #3C3489; font-style: italic; }
+
+    .who-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 1.5rem; }
+    .who-card { background: #fff; border: 0.5px solid #e8e8e5; border-radius: 10px; padding: 14px; font-size: 13px; color: #555; line-height: 1.5; }
+    .who-card strong { display: block; color: #111; font-weight: 500; margin-bottom: 3px; font-size: 14px; }
+
+    /* Instructions tab */
+    .instructions { max-width: 640px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .instructions h2 { font-size: 1.4rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .instructions .sub { font-size: 14px; color: #888; margin-bottom: 2rem; }
+
+    .step-block { background: #fff; border: 0.5px solid #e8e8e5; border-radius: 14px; padding: 20px 20px 20px 70px; margin-bottom: 14px; position: relative; }
+    .step-num { position: absolute; left: 20px; top: 20px; width: 36px; height: 36px; border-radius: 50%; background: #3C3489; color: #fff; font-size: 15px; font-weight: 500; display: flex; align-items: center; justify-content: center; }
+    .step-block h3 { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+    .step-block p { font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 6px; }
+    .step-block a { color: #3C3489; font-size: 13px; }
+
+    .tip-box { background: #f0effe; border-radius: 10px; padding: 14px 16px; margin: 1.5rem 0; font-size: 13px; color: #3C3489; line-height: 1.6; }
+    .tip-box strong { display: block; margin-bottom: 4px; }
+
+    .cost-box { background: #fff; border: 0.5px solid #e8e8e5; border-radius: 10px; padding: 16px; margin: 1.5rem 0; font-size: 13px; color: #555; line-height: 1.6; }
+    .cost-box strong { color: #111; display: block; margin-bottom: 4px; }
+
+    /* FAQ tab */
+    .faq { max-width: 640px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .faq h2 { font-size: 1.4rem; font-weight: 500; margin-bottom: 1.5rem; }
+    .faq-item { border-bottom: 0.5px solid #e8e8e5; padding: 1.1rem 0; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q { font-size: 15px; font-weight: 500; color: #111; margin-bottom: 6px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .faq-q span { color: #bbb; font-weight: 400; font-size: 18px; }
+    .faq-a { font-size: 14px; color: #555; line-height: 1.65; display: none; padding-top: 4px; }
+    .faq-a.open { display: block; }
+
+    /* CTA */
+    .dfy-banner { background: #1a1a2e; color: #fff; text-align: center; padding: 2.5rem 1.5rem; }
+    .dfy-banner p { font-size: 1.1rem; margin-bottom: 1rem; opacity: 0.9; }
+    .dfy-banner a { display: inline-block; background: #9b8ff5; color: #fff; padding: 10px 22px; border-radius: 999px; text-decoration: none; font-size: 14px; font-weight: 500; margin-bottom: 1rem; }
+    .dfy-note { font-size: 11px; opacity: 0.45; max-width: 520px; margin: 0 auto; line-height: 1.6; font-style: italic; }
+    .cta { text-align: center; padding: 3.5rem 1.5rem; background: #fff; border-top: 0.5px solid #e8e8e5; }
+    .cta h2 { font-size: 1.5rem; font-weight: 500; margin-bottom: 0.75rem; }
+    .cta p { color: #666; margin-bottom: 1.5rem; font-size: 14px; }
+    .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem; }
+    .btn-purple { background: #3C3489; color: #fff; padding: 12px 24px; border-radius: 999px; text-decoration: none; font-size: 14px; font-weight: 500; }
+    .btn-outline { background: transparent; color: #3C3489; border: 1.5px solid #3C3489; padding: 12px 24px; border-radius: 999px; text-decoration: none; font-size: 14px; font-weight: 500; }
+    .donate-line { font-size: 12px; color: #bbb; }
+    .donate-line a { color: #3C3489; }
+
+    footer { text-align: center; padding: 2rem; font-size: 12px; color: #ccc; border-top: 0.5px solid #e8e8e5; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="badge">ACCOMMODATIONS | OPEN SOURCE</div>
+    <h1>Point at any screen.<br><span>Hear it read aloud.</span></h1>
+    <p>myReadOut turns your phone into a universal screen reader without installation.</p>
+    <div class="hero-buttons">
+      <a href="prototype/index.html" class="btn-white">Open the app</a>
+      <a href="https://github.com/yourusername/myreadout" class="btn-ghost">View on GitHub</a>
+    </div>
+    <p class="hero-note">Works in Chrome on iPhone and Android</p>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('about')">About</button>
+    <button class="nav-tab" onclick="showTab('instructions')">How to use it</button>
+    <button class="nav-tab" onclick="showTab('faq')">FAQ</button>
+  </div>
+
+  <!-- About tab -->
+  <div id="tab-about" class="tab-content active">
+    <div class="about-section">
+      <h2>What is myReadOut?</h2>
+      <p>Most screen readers only work on your own phone or computer. They can't read a public kiosk, a hotel TV, your friend's laptop, or a printed menu.</p>
+      <p>myReadOut is different. Your phone is the reader. You point it at anything with text on it — any screen, any sign, any surface — and it reads it out loud.</p>
+      <div class="big-quote">"myReadOut makes for an easier read."</div>
+      <p>No install needed on the thing you're reading. Just open myReadOut in Chrome on your phone and go.</p>
+
+      <h2 style="margin-top:2rem">Who it helps</h2>
+      <div class="who-grid">
+        <div class="who-card"><strong>Low vision & blindness</strong>Read any screen, not just your own phone.</div>
+        <div class="who-card"><strong>Dyslexia</strong>Hear the words for ease of access.</div>
+        <div class="who-card"><strong>Leisure readers</strong>Listen and understand at your own pace.</div>
+        <div class="who-card"><strong>Older adults</strong>No complicated setup. Point and tap.</div>
+        <div class="who-card"><strong>Anyone</strong>Bright sunlight, small print, screen too far away.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instructions tab -->
+  <div id="tab-instructions" class="tab-content">
+    <div class="instructions">
+      <h2>How to use myReadOut</h2>
+      <p class="sub">You'll need about 10 minutes the first time. After that, it's just open and tap.</p>
+
+      <div class="step-block">
+        <div class="step-num">1</div>
+        <h3>Get an Anthropic API key</h3>
+        <p>myReadOut uses Anthropic's AI to read text from your camera. You need your own key — it's like a personal access pass.</p>
+        <p>Go to <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>, create an account, click <strong>API Keys</strong> in the sidebar, then <strong>Create Key</strong>. Copy the key — it starts with <code>sk-ant-</code>. Save it somewhere, you only see it once.</p>
+      </div>
+
+      <div class="cost-box">
+        <strong>What does it cost?</strong>
+        Anthropic charge per use, not a monthly fee. Each capture costs roughly a few pence — the only cost to you is your own use. You top up credit on their site and it draws from that. myReadOut itself is completely free.
+      </div>
+
+      <div class="step-block">
+        <div class="step-num">2</div>
+        <h3>Open myReadOut in Chrome</h3>
+        <p>Tap <a href="prototype/index.html">Open the app</a> in Chrome on your phone. When prompted, paste in your API key and tap <strong>Get started</strong>. Allow camera access when your phone asks.</p>
+        <p>You can also add it to your home screen like an app — tap the share icon in Chrome and choose "Add to Home Screen".</p>
+      </div>
+
+      <div class="step-block">
+        <div class="step-num">3</div>
+        <h3>Point and tap</h3>
+        <p>Point your camera at any screen, sign, menu, or printed text. Tap the big camera button. Wait a moment — the app will read the text aloud automatically and show it on screen.</p>
+      </div>
+
+      <div class="tip-box">
+        <strong>Tips for best results</strong>
+        Hold the camera steady · Make sure the text is well lit · Works best on clear printed text · Use the speed slider to slow down or speed up the reading · Tap the speaker icon to replay the last result
+      </div>
+
+      <div class="step-block">
+        <div class="step-num">4</div>
+        <h3>That's it</h3>
+        <p>Your key is saved in your browser so you won't need to enter it again. Every capture is private — nothing is stored, recorded, or shared with anyone.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ tab -->
+  <div id="tab-faq" class="tab-content">
+    <div class="faq">
+      <h2>Frequently asked questions</h2>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Does this work on iPhone? <span>+</span></div>
+        <div class="faq-a">Yes — open it in Chrome on iPhone. Safari may have camera limitations so Chrome is recommended on both iPhone and Android.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Why do I need an API key? <span>+</span></div>
+        <div class="faq-a">myReadOut uses Anthropic's AI to understand what's in your camera image and extract the text. That's what makes it smart enough to read almost anything. Anthropic charge for that service directly, so you bring your own key and pay them — nothing goes through us.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How much does it actually cost? <span>+</span></div>
+        <div class="faq-a">Each capture costs roughly £0.002–0.005 — less than half a penny. If you captured something 100 times a day you'd spend about 20–50p. Most people use it far less than that. The only cost to you is your own use.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Is my camera footage stored anywhere? <span>+</span></div>
+        <div class="faq-a">No. A single still frame is captured when you tap the button, sent to Anthropic's API for text extraction, and that's it. No video is recorded. Nothing is stored by myReadOut. Anthropic's privacy policy governs how they handle API requests.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Can other people use my API key? <span>+</span></div>
+        <div class="faq-a">No — each person needs their own key. The app stores your key only in your own browser. Nobody else can see it, and any charges go to your own Anthropic account only.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What if I get an error? <span>+</span></div>
+        <div class="faq-a">First check you copied the full API key including the <code>sk-ant-</code> at the start. If the error says "authentication" your key may be wrong or your credit may have run out — check your balance at console.anthropic.com. If the camera won't start, make sure you've allowed camera access in your browser settings.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Can I use this offline? <span>+</span></div>
+        <div class="faq-a">The camera works offline but the text reading needs an internet connection to call Anthropic's API.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Can I build on this or fork it? <span>+</span></div>
+        <div class="faq-a">Yes — please do. myReadOut is open source under the MIT licence. Fork it, build on it, make it better. That's the whole point.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dfy-banner">
+    <p>Everyone can DIY with code — but wouldn't you rather have it DFY?*</p>
+    <a href="hire-us.html">Work with us →</a>
+    <p class="dfy-note">*DIY = Do It Yourself, meaning the code is open source and free to use or build on yourself · DFY = Done For You, meaning we build it for you so you don't have to touch a line of code</p>
+  </div>
+
+  <div class="cta">
+    <h2>Ready to try it?</h2>
+    <p>Free and open source. Works in Chrome on any phone.</p>
+    <div class="cta-buttons">
+      <a href="prototype/index.html" class="btn-purple">Open myReadOut</a>
+      <a href="https://github.com/yourusername/myreadout" class="btn-outline">GitHub</a>
+    </div>
+    <p class="donate-line">If this helped you, <a href="https://buymeacoffee.com/jayevajohnson">pay what you want</a>· Freely fork this idea.</p>
+  </div>
+
+  <footer>myReadOut · Open source · MIT licence · Built with AI</footer>
+
+  <script>
+    function showTab(name) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+    function toggleFaq(el) {
+      const a = el.nextElementSibling;
+      const span = el.querySelector('span');
+      a.classList.toggle('open');
+      span.textContent = a.classList.contains('open') ? '−' : '+';
+    }
+  </script>
+
+</body>
+</html>

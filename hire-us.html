@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>We build with you.</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #faf9f7; color: #111; line-height: 1.7; }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 2rem; border-bottom: 0.5px solid #e8e8e5; background: #fff;
+    }
+    .nav-name { font-weight: 500; font-size: 15px; }
+    .nav-link {
+      color: #3C3489; text-decoration: none; font-size: 14px; font-weight: 500;
+      background: #f0effe; padding: 8px 18px; border-radius: 999px;
+    }
+
+    /* Hero */
+    .hero { max-width: 680px; margin: 0 auto; padding: 5rem 1.5rem 3.5rem; }
+
+    .availability {
+      display: inline-flex; align-items: center; gap: 7px; font-size: 13px;
+      color: #3b6d11; background: #eaf3de; border-radius: 999px; padding: 5px 14px; margin-bottom: 1.5rem;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #63a526; }
+
+    .hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 500; line-height: 1.15; margin-bottom: 1rem; }
+    .hero h1 em { font-style: normal; color: #3C3489; }
+
+    .diy-dfy {
+      background: #1a1a2e; color: #fff; border-radius: 14px;
+      padding: 1.5rem 1.75rem; margin-bottom: 1.75rem;
+    }
+    .diy-dfy p { font-size: 1.05rem; margin-bottom: 0.5rem; line-height: 1.5; }
+    .diy-dfy .asterisk-note {
+      font-size: 11px; opacity: 0.45; font-style: italic; line-height: 1.6;
+    }
+
+    .hero > p { font-size: 1rem; color: #555; max-width: 520px; margin-bottom: 2rem; }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary { background: #3C3489; color: #fff; padding: 13px 26px; border-radius: 999px; text-decoration: none; font-size: 15px; font-weight: 500; }
+    .btn-secondary { background: transparent; color: #3C3489; border: 1.5px solid #3C3489; padding: 13px 26px; border-radius: 999px; text-decoration: none; font-size: 15px; font-weight: 500; }
+
+    /* What we do */
+    .what { background: #fff; border-top: 0.5px solid #e8e8e5; border-bottom: 0.5px solid #e8e8e5; padding: 4rem 1.5rem; }
+    .what-inner { max-width: 680px; margin: 0 auto; }
+    .what h2 { font-size: 1.5rem; font-weight: 500; margin-bottom: 0.75rem; }
+    .what-inner > p { color: #555; margin-bottom: 2rem; max-width: 520px; }
+    .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .service-card { border: 0.5px solid #e8e8e5; border-radius: 12px; padding: 18px; background: #faf9f7; }
+    .service-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
+    .service-card h3 { font-size: 14px; font-weight: 500; margin-bottom: 5px; }
+    .service-card p { font-size: 13px; color: #666; line-height: 1.5; }
+
+    /* Work */
+    .work { max-width: 680px; margin: 0 auto; padding: 4rem 1.5rem; }
+    .work h2 { font-size: 1.5rem; font-weight: 500; margin-bottom: 1.5rem; }
+    .project-card { border: 0.5px solid #e8e8e5; border-radius: 14px; background: #fff; padding: 24px; margin-bottom: 14px; }
+    .project-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 10px; }
+    .project-card h3 { font-size: 16px; font-weight: 500; }
+    .project-card p { font-size: 14px; color: #555; margin-bottom: 14px; line-height: 1.6; }
+    .tag { font-size: 11px; background: #f0effe; color: #3C3489; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+    .project-link { font-size: 13px; color: #3C3489; text-decoration: none; font-weight: 500; }
+
+    /* How we work */
+    .how { background: #fff; border-top: 0.5px solid #e8e8e5; border-bottom: 0.5px solid #e8e8e5; padding: 4rem 1.5rem; }
+    .how-inner { max-width: 680px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    @media (max-width: 560px) { .how-inner { grid-template-columns: 1fr; gap: 1.5rem; } }
+    .how h2 { font-size: 1.5rem; font-weight: 500; margin-bottom: 1rem; }
+    .how p { font-size: 14px; color: #555; margin-bottom: 0.75rem; line-height: 1.6; }
+    .list { list-style: none; padding: 0; }
+    .list li { font-size: 14px; color: #444; padding: 8px 0; border-bottom: 0.5px solid #f0f0ee; display: flex; gap: 8px; }
+    .list li:last-child { border-bottom: none; }
+    .check { color: #3C3489; font-weight: 500; }
+
+    /* Contact */
+    .contact { max-width: 680px; margin: 0 auto; padding: 4rem 1.5rem; text-align: center; }
+    .contact h2 { font-size: 1.75rem; font-weight: 500; margin-bottom: 0.75rem; }
+    .contact > p { color: #666; margin-bottom: 2rem; }
+    .contact-card { background: #fff; border: 0.5px solid #e8e8e5; border-radius: 16px; padding: 2rem; max-width: 420px; margin: 0 auto; }
+    .contact-card p { font-size: 14px; color: #555; margin-bottom: 1.5rem; }
+    .contact-email { display: block; background: #3C3489; color: #fff; padding: 13px 24px; border-radius: 999px; text-decoration: none; font-size: 15px; font-weight: 500; margin-bottom: 12px; }
+    .contact-sub { font-size: 13px; color: #aaa; text-decoration: none; display: block; }
+
+    footer { text-align: center; padding: 2rem; font-size: 12px; color: #bbb; border-top: 0.5px solid #e8e8e5; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <span class="nav-name">ReadOut Team</span>
+    <a href="mailto:jmjohnson@duck.com" class="nav-link">Get in touch</a>
+  </nav>
+
+  <div class="hero">
+    <div class="availability"><div class="dot"></div> Taking on new projects</div>
+
+    <h1>Everyone can DIY<br>with code — still, wouldn't<br>you rather have it <em>DFY?</em></h1>
+
+    <div class="diy-dfy">
+      <p>The code is open source. You're free to build it yourself. But if you'd rather just have it working — we do that.</p>
+      <p class="asterisk-note">*DIY = Do It Yourself — all our projects are open source and free to use or fork · DFY = Done For You — we build it so you don't have to touch a line of code</p>
+    </div>
+
+    <p>Native coding language skill and experience. Ai-affirming. We build small, focused AI-powered web tools that solve real problems. Collaborative, communicative, community-minded.</p>
+
+    <div class="hero-btns">
+      <a href="mailto:you@youremail.com" class="btn-primary">Work with us</a>
+      <a href="https://github.com/yourusername" class="btn-secondary">See our work</a>
+    </div>
+  </div>
+
+  <div class="what">
+    <div class="what-inner">
+      <h2>What we build</h2>
+      <p>If you have an idea for a small AI-powered tool and need someone to make it real, that's what we do.</p>
+      <div class="services">
+        <div class="service-card"><span class="service-icon">👁️</span><h3>Vision tools</h3><p>Apps that read, analyse, or describe images and documents using AI.</p></div>
+        <div class="service-card"><span class="service-icon">🗣️</span><h3>Voice & speech</h3><p>Text-to-speech, transcription, and audio-powered accessibility tools.</p></div>
+        <div class="service-card"><span class="service-icon">🤖</span><h3>AI assistants</h3><p>Custom chatbots and tools built around your specific use case.</p></div>
+        <div class="service-card"><span class="service-icon">♿</span><h3>Accessibility</h3><p>Tools that make digital content more accessible to more people.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="work">
+    <h2>Recent work</h2>
+    <div class="project-card">
+      <div class="project-top">
+        <h3>myReadOut</h3>
+        <span class="tag">Live · Open source</span>
+      </div>
+      <p>A phone-powered universal screen reader. Point your camera at any screen — a kiosk, a TV, someone else's laptop — and hear it read aloud. No install needed on the device you're reading.</p>
+      <a href="index.html" class="project-link">See the project →</a>
+    </div>
+    <div class="project-card" style="border-style:dashed;background:#faf9f7;">
+      <div class="project-top">
+        <h3>Your project here</h3>
+        <span class="tag" style="background:#f5f5f3;color:#aaa">Upcoming</span>
+      </div>
+      <p style="color:#aaa">Got an idea? We'd love to hear it — even rough ones.</p>
+      <a href="mailto:jmjohnson@youremail.com" class="project-link">Tell us about it →</a>
+    </div>
+  </div>
+
+  <div class="how">
+    <div class="how-inner">
+      <div>
+        <h2>How we work</h2>
+        <p>We build independently and use AI tools to move fast — which means you get more for your budget and shorter timelines.</p>
+        <p>We focus on tools that do one thing well. No bloated builds, no scope creep, no tech-speak. Just working software and plain English.</p>
+        <p>Everything we build is open source unless you ask otherwise. You own what we make.</p>
+      </div>
+      <div>
+        <ul class="list">
+          <li><span class="check">✓</span> We'll tell you if something's out of scope</li>
+          <li><span class="check">✓</span> Simple tools that actually work</li>
+          <li><span class="check">✓</span> Fast — ideas become prototypes quickly</li>
+          <li><span class="check">✓</span> Open source by default</li>
+          <li><span class="check">✓</span> You own it. No lock-in.</li>
+          <li><span class="check">✓</span> Fair, transparent pricing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact">
+    <h2>Let's build something</h2>
+    <p>Tell us what you have in mind. Even rough ideas are welcome.</p>
+    <div class="contact-card">
+      <p>We typically respond within a day. Happy to have a quick no-commitment chat first.</p>
+      <a href="mailto:jmjohnson@duck.com" class="contact-email">jmjohnson@duck.com</a>
+      <a href="https://jayevajohnson.github.io/" class="contact-sub">jayevajohnson.github.io</a>
+    </div>
+  </div>
+
+  <footer>Studio Name · Built with AI · Open source</footer>
+
+</body>
+</html>
