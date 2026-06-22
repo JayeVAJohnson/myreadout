@@ -1,1 +1,691 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1a1a2e" />
+  <title>myReadOut</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/tabler-icons.min.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #1a1a2e;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    /* Phone shell */
+    .phone-shell {
+      width: 360px;
+      background: #111118;
+      border-radius: 48px;
+      border: 2px solid #2e2e45;
+      padding: 12px;
+      position: relative;
+    }
+
+    /* Side buttons */
+    .phone-shell::before {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: 80px;
+      width: 3px;
+      height: 32px;
+      background: #2e2e45;
+      border-radius: 2px 0 0 2px;
+    }
+
+    .phone-shell::after {
+      content: '';
+      position: absolute;
+      right: -4px;
+      top: 100px;
+      width: 3px;
+      height: 52px;
+      background: #2e2e45;
+      border-radius: 0 2px 2px 0;
+    }
+
+    .vol-btn {
+      position: absolute;
+      left: -4px;
+      width: 3px;
+      height: 28px;
+      background: #2e2e45;
+      border-radius: 2px 0 0 2px;
+    }
+    .vol-up { top: 120px; }
+    .vol-down { top: 156px; }
+
+    /* Screen bezel */
+    .phone-screen {
+      background: #fff;
+      border-radius: 38px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Notch / dynamic island */
+    .notch {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 30px;
+      background: #111118;
+      border-radius: 20px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      gap: 6px;
+    }
+
+    .notch-camera {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #1a1a2e;
+      border: 1.5px solid #333;
+    }
+
+    /* Status bar */
+    .status-bar {
+      background: #faf9f7;
+      padding: 14px 20px 8px;
+      font-size: 11px;
+      color: #666;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 50px;
+    }
+
+    .status-time { font-weight: 600; font-size: 13px; color: #111; }
+    .status-icons { display: flex; gap: 4px; align-items: center; font-size: 13px; color: #333; }
+
+    /* Home indicator */
+    .home-indicator {
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #faf9f7;
+    }
+
+    .home-bar {
+      width: 120px;
+      height: 4px;
+      background: #222;
+      border-radius: 4px;
+      opacity: 0.15;
+    }
+
+    /* App content */
+    .app-body { padding: 12px 16px 0; background: #faf9f7; }
+
+    /* Setup screen */
+    #setup-screen { padding-bottom: 4px; }
+
+    .setup-logo {
+      text-align: center;
+      padding: 1.5rem 0 1rem;
+    }
+
+    .setup-logo-icon {
+      width: 56px; height: 56px;
+      background: #3C3489;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      font-size: 26px;
+      color: #fff;
+    }
+
+    .setup-title { font-size: 18px; font-weight: 600; color: #111; }
+    .setup-sub { font-size: 12px; color: #888; margin-top: 4px; line-height: 1.4; }
+
+    .setup-card {
+      background: #fff;
+      border: 0.5px solid #e8e8e5;
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 14px;
+      margin-bottom: 14px;
+    }
+
+    .setup-label { font-size: 11px; color: #888; margin-bottom: 5px; display: block; }
+
+    .setup-input {
+      width: 100%;
+      border: 0.5px solid #ddd;
+      border-radius: 8px;
+      padding: 9px 11px;
+      font-size: 12px;
+      font-family: inherit;
+      color: #111;
+      margin-bottom: 10px;
+      background: #fafaf8;
+    }
+
+    .setup-input:focus { outline: none; border-color: #3C3489; }
+
+    .setup-hint {
+      font-size: 10px;
+      color: #bbb;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .setup-hint a { color: #3C3489; }
+
+    /* Main app */
+    #app-screen { display: none; padding-bottom: 4px; }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0 10px;
+    }
+
+    .app-title { font-size: 17px; font-weight: 600; color: #111; }
+    .app-sub { font-size: 11px; color: #aaa; }
+
+    .icon-btn {
+      background: #f0f0ee;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      font-size: 16px;
+      padding: 7px;
+      border-radius: 50%;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Viewfinder */
+    .viewfinder-wrap {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #111;
+      margin-bottom: 10px;
+      aspect-ratio: 4/3;
+    }
+
+    #camera-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    #camera-canvas { display: none; }
+
+    .vf-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .vf-corner {
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: rgba(255,255,255,0.75);
+      border-style: solid;
+    }
+    .vf-tl { top: 12px; left: 12px; border-width: 2px 0 0 2px; border-radius: 2px 0 0 0; }
+    .vf-tr { top: 12px; right: 12px; border-width: 2px 2px 0 0; border-radius: 0 2px 0 0; }
+    .vf-bl { bottom: 12px; left: 12px; border-width: 0 0 2px 2px; border-radius: 0 0 0 2px; }
+    .vf-br { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; border-radius: 0 0 2px 0; }
+
+    .vf-center-label {
+      position: absolute;
+      bottom: 12px;
+      left: 0; right: 0;
+      text-align: center;
+      color: rgba(255,255,255,0.5);
+      font-size: 11px;
+    }
+
+    /* Capture button */
+    .capture-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 10px;
+      padding: 4px 0;
+    }
+
+    .capture-btn {
+      width: 62px; height: 62px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      background: #3C3489;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 24px;
+      box-shadow: 0 0 0 2px #3C3489;
+      transition: transform 0.1s;
+    }
+
+    .capture-btn:active { transform: scale(0.93); }
+    .capture-btn:disabled { background: #bbb; box-shadow: 0 0 0 2px #bbb; }
+
+    .capture-side-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 0.5px solid #e0e0de;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 17px;
+    }
+
+    /* Status */
+    .status-bar-app {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      color: #999;
+      min-height: 20px;
+      margin-bottom: 8px;
+    }
+
+    .spinner {
+      width: 12px; height: 12px;
+      border: 2px solid #eee;
+      border-top-color: #3C3489;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Result */
+    .result-card {
+      border-radius: 12px;
+      border: 0.5px solid #e8e8e5;
+      background: #fff;
+      padding: 12px;
+      margin-bottom: 10px;
+      display: none;
+    }
+
+    .result-label { font-size: 10px; color: #bbb; margin-bottom: 6px; }
+    .result-text { font-size: 13px; color: #111; line-height: 1.55; max-height: 100px; overflow-y: auto; }
+
+    /* Action buttons */
+    .action-row { display: flex; gap: 8px; margin-bottom: 10px; }
+
+    .btn {
+      flex: 1;
+      background: #fff;
+      border: 0.5px solid #e0e0de;
+      border-radius: 10px;
+      padding: 10px 6px;
+      font-size: 12px;
+      cursor: pointer;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      font-family: inherit;
+    }
+
+    .btn:active { transform: scale(0.97); }
+    .btn.primary { border-color: #3C3489; color: #3C3489; background: #f0effe; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Settings */
+    .settings-section {
+      background: #fff;
+      border: 0.5px solid #e8e8e5;
+      border-radius: 12px;
+      padding: 2px 12px;
+      margin-bottom: 12px;
+    }
+
+    .voice-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 0;
+      border-bottom: 0.5px solid #f4f4f2;
+    }
+
+    .voice-row:last-child { border-bottom: none; }
+    .voice-label { font-size: 11px; color: #888; flex: 1; display: flex; align-items: center; gap: 5px; }
+
+    select, input[type=range] {
+      font-size: 11px;
+      border: 0.5px solid #e0e0de;
+      border-radius: 6px;
+      padding: 3px 6px;
+      background: #fafaf8;
+      color: #111;
+      font-family: inherit;
+      max-width: 120px;
+    }
+
+    .speed-val { font-size: 11px; color: #666; min-width: 34px; text-align: right; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="phone-shell">
+    <div class="vol-btn vol-up"></div>
+    <div class="vol-btn vol-down"></div>
+
+    <div class="phone-screen">
+      <div class="notch">
+        <div class="notch-camera"></div>
+      </div>
+
+      <div class="status-bar">
+        <span class="status-time" id="clock">9:41</span>
+        <div class="status-icons">
+          <i class="ti ti-signal-3g" style="font-size:12px"></i>
+          <i class="ti ti-wifi" style="font-size:12px"></i>
+          <i class="ti ti-battery-2" style="font-size:12px"></i>
+        </div>
+      </div>
+
+      <!-- Setup screen -->
+      <div class="app-body" id="setup-screen">
+        <div class="setup-logo">
+          <div class="setup-logo-icon">
+            <i class="ti ti-ear"></i>
+          </div>
+          <div class="setup-title">myReadOut</div>
+          <div class="setup-sub">Point at any screen. Hear it read aloud.</div>
+        </div>
+
+        <div class="setup-card">
+          <label class="setup-label" for="api-key-input">Anthropic API key</label>
+          <input
+            type="password"
+            id="api-key-input"
+            class="setup-input"
+            placeholder="sk-ant-..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <div class="setup-hint">
+            Stored only in your browser. Never sent anywhere except Anthropic's API directly.<br><br>
+            Get a key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> — pay only for what you use, a few cents per capture.
+          </div>
+          <button class="btn primary" style="width:100%;flex:none;border-radius:10px;padding:11px" onclick="saveKey()">
+            <i class="ti ti-arrow-right"></i> Get started
+          </button>
+          <p style="font-size:10px;color:#bbb;font-style:italic;text-align:center;margin-top:12px;line-height:1.5;">Not sure where to start? <a href="https://github.com/JayeVAJohnson/myreadout#readme" target="_blank" style="color:#9990d4;font-style:italic;">Read the setup guide</a> — it walks you through getting a key and using the app in about 5 minutes.</p>
+        </div>
+      </div>
+
+      <!-- Main app -->
+      <div class="app-body" id="app-screen">
+
+        <div class="app-header">
+          <div>
+            <div class="app-title">myReadOut</div>
+            <div class="app-sub">Point at any screen</div>
+          </div>
+          <button class="icon-btn" onclick="showSetup()" aria-label="Settings">
+            <i class="ti ti-settings"></i>
+          </button>
+        </div>
+
+        <div class="viewfinder-wrap">
+          <video id="camera-video" autoplay playsinline muted></video>
+          <canvas id="camera-canvas"></canvas>
+          <div class="vf-overlay">
+            <div class="vf-corner vf-tl"></div>
+            <div class="vf-corner vf-tr"></div>
+            <div class="vf-corner vf-bl"></div>
+            <div class="vf-corner vf-br"></div>
+            <span class="vf-center-label" id="vf-label">Tap the button to read</span>
+          </div>
+        </div>
+
+        <div class="capture-row">
+          <button class="capture-side-btn" onclick="copyResult()" aria-label="Copy text">
+            <i class="ti ti-copy"></i>
+          </button>
+          <button class="capture-btn" id="capture-btn" onclick="captureAndRead()" aria-label="Capture and read">
+            <i class="ti ti-camera"></i>
+          </button>
+          <button class="capture-side-btn" onclick="speakResult()" aria-label="Read aloud">
+            <i class="ti ti-volume" id="speak-icon"></i>
+          </button>
+        </div>
+
+        <div class="status-bar-app" id="status-bar"></div>
+
+        <div class="result-card" id="result-card">
+          <div class="result-label">Detected text</div>
+          <div class="result-text" id="result-text"></div>
+        </div>
+
+        <div class="settings-section">
+          <div class="voice-row">
+            <span class="voice-label"><i class="ti ti-microphone" style="font-size:13px"></i> Voice</span>
+            <select id="voice-select" aria-label="Select voice" onchange="updateVoice()"></select>
+          </div>
+          <div class="voice-row">
+            <span class="voice-label"><i class="ti ti-gauge" style="font-size:13px"></i> Speed</span>
+            <input type="range" min="0.5" max="2" step="0.25" value="1" id="speed-slider"
+              aria-label="Playback speed"
+              oninput="document.getElementById('speed-val').textContent=parseFloat(this.value).toFixed(2)+'×'">
+            <span class="speed-val" id="speed-val">1.00×</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="home-indicator">
+        <div class="home-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let apiKey = '';
+    let stream = null;
+    let selectedVoice = null;
+    let lastResult = '';
+
+    function saveKey() {
+      const val = document.getElementById('api-key-input').value.trim();
+      if (!val.startsWith('sk-ant-')) {
+        alert("That doesn't look like an Anthropic API key. It should start with sk-ant-");
+        return;
+      }
+      apiKey = val;
+      localStorage.setItem('myreadout_key', val);
+      showApp();
+    }
+
+    function showSetup() {
+      stopCamera();
+      document.getElementById('setup-screen').style.display = 'block';
+      document.getElementById('app-screen').style.display = 'none';
+    }
+
+    function showApp() {
+      document.getElementById('setup-screen').style.display = 'none';
+      document.getElementById('app-screen').style.display = 'block';
+      startCamera();
+      loadVoices();
+    }
+
+    async function startCamera() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 960 } },
+          audio: false
+        });
+        document.getElementById('camera-video').srcObject = stream;
+        document.getElementById('vf-label').textContent = 'Tap the button to read';
+        setStatus('');
+      } catch (err) {
+        document.getElementById('vf-label').textContent = 'Camera access needed';
+        setStatus('Allow camera access in your browser settings');
+      }
+    }
+
+    function stopCamera() {
+      if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+    }
+
+    function captureFrame() {
+      const video = document.getElementById('camera-video');
+      const canvas = document.getElementById('camera-canvas');
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      return canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+    }
+
+    async function captureAndRead() {
+      if (!apiKey) { showSetup(); return; }
+      const btn = document.getElementById('capture-btn');
+      btn.disabled = true;
+      document.getElementById('result-card').style.display = 'none';
+      window.speechSynthesis.cancel();
+      setStatus('<div class="spinner"></div> Reading...');
+
+      let imageData;
+      try { imageData = captureFrame(); }
+      catch (e) { setStatus('Could not capture — is the camera running?'); btn.disabled = false; return; }
+
+      try {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-6',
+            max_tokens: 1000,
+            messages: [{
+              role: 'user',
+              content: [
+                { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: imageData } },
+                { type: 'text', text: 'Read all the text visible in this image. Return only the text content, in reading order, with no commentary or explanation. If there is no readable text, reply with: "No text found."' }
+              ]
+            }]
+          })
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error?.message || `API error ${res.status}`);
+        }
+
+        const data = await res.json();
+        lastResult = data.content?.[0]?.text || 'No text found.';
+        document.getElementById('result-text').textContent = lastResult;
+        document.getElementById('result-card').style.display = 'block';
+        setStatus('');
+        speakResult();
+
+      } catch (err) {
+        setStatus('Error: ' + err.message);
+      }
+
+      btn.disabled = false;
+    }
+
+    function loadVoices() {
+      const select = document.getElementById('voice-select');
+      function populate() {
+        const voices = window.speechSynthesis.getVoices();
+        select.innerHTML = '';
+        voices.forEach((v, i) => {
+          const opt = document.createElement('option');
+          opt.value = i;
+          opt.textContent = v.name;
+          select.appendChild(opt);
+        });
+        const preferred = voices.findIndex(v => /samantha|karen|daniel|moira|natural/i.test(v.name));
+        if (preferred >= 0) select.value = preferred;
+        updateVoice();
+      }
+      populate();
+      window.speechSynthesis.onvoiceschanged = populate;
+    }
+
+    function updateVoice() {
+      selectedVoice = window.speechSynthesis.getVoices()[document.getElementById('voice-select').value] || null;
+    }
+
+    function speakResult() {
+      if (!lastResult) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(lastResult);
+      u.rate = parseFloat(document.getElementById('speed-slider').value);
+      if (selectedVoice) u.voice = selectedVoice;
+      window.speechSynthesis.speak(u);
+      const icon = document.getElementById('speak-icon');
+      icon.className = 'ti ti-player-pause';
+      u.onend = () => { icon.className = 'ti ti-volume'; };
+    }
+
+    function copyResult() {
+      if (!lastResult) return;
+      navigator.clipboard.writeText(lastResult).then(() => {
+        setStatus('Copied to clipboard');
+        setTimeout(() => setStatus(''), 1500);
+      });
+    }
+
+    function setStatus(html) {
+      document.getElementById('status-bar').innerHTML = html;
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const h = now.getHours() % 12 || 12;
+      const m = now.getMinutes().toString().padStart(2, '0');
+      document.getElementById('clock').textContent = h + ':' + m;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    window.addEventListener('load', () => {
+      const saved = localStorage.getItem('myreadout_key');
+      if (saved && saved.startsWith('sk-ant-')) {
+        apiKey = saved;
+        document.getElementById('api-key-input').value = saved;
+        showApp();
+      }
+      loadVoices();
+    });
+  </script>
+
+</body>
+</html>
