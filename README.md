@@ -26,7 +26,7 @@ On any device with a browser, open a URL or scan a QR code. The host browser sha
 
 ---
 
-## Why this doesn't exist yet
+## Overview 
 
 | Tool | Camera read | Tab audio | No host install | Cross-platform |
 |---|---|---|---|---|
@@ -52,7 +52,7 @@ Never used an API before? No problem. This takes about 5 minutes.
 3. Click **Create Key**, give it a name like `myreadout`
 4. Copy the key — it starts with `sk-ant-` — and paste it somewhere safe. **You only see it once.**
 
-> **What does it cost?** Anthropic charges per use, not a monthly fee. Each capture costs roughly $0.002–0.005 (less than half a penny). You add credit to your account and it draws from that. There is no free tier, but a small amount of credit goes a long way.
+> **What does it cost?** Anthropic charges per use, not a monthly fee. Each capture costs roughly a few pence. You add credit to your account and it draws from that. There is no free tier, but a small amount of credit goes a long way. The only cost to you is your own use.
 
 > **Is it safe?** Your key is stored only in your own browser. It never touches any server except Anthropic's directly. Nobody else — including this app — can see it.
 
@@ -159,8 +159,12 @@ The camera capture works offline but the text reading requires an internet conne
 Camera mode: **working prototype**
 Tab audio relay: **spec'd, not yet built**
 
-This is an open project, built by native coding / skilled coding student leveraging AI for, literally, goodness' sake. 
- 
+This is an open project, built by native coding / skilled coding student leveraging Claude AI for, literally, goodness' sake.
+
+If you build on this, open an issue and say hey.
+
+If it helped you, [pay what you want](https://buymeacoffee.com/jiandamonique) ☕
+
 ---
 
 ## License
